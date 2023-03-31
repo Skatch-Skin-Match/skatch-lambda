@@ -14,27 +14,15 @@ def lambda_handler(event, context):
        url = 'https://d30ukgyabounne.cloudfront.net/face.jpeg'
 
 
-    print('event',url)
-
-
-    # body = json.loads(event['body'])
     print("Hello AWS!")
-    # print("event = {}".format(event))
-    # return {
-    #     'statusCode': 200,
-    # }
-    # val = userSkinTone.test()
     val = userSkinTone(url)
     print('vvvvvvvvvvvv',val)
-    # return val
     return {
     'statusCode': 200,
     'headers': {'Content-Type': 'application/json'},
     'body': val
 }
-    # response = requests.get("https://www.example.com/")
-    # print(response.text)
-    # return response.text
+
 def avgHSVCalc(imgHSV):
     print('inside avgHSVCalc')
 
@@ -74,13 +62,6 @@ def avgHSVCalc(imgHSV):
 
 def userSkinTone(url):
     print('inside ust')
-    # # Load the image
-    # userImg = cv2.imread('https://lp2.hm.com/hmgoepprod?set=quality%5B79%5D%2Csource%5B%2Fe8%2F4e%2Fe84e3d6cf5155ac862bafa692f10346c3957fa96.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url[file:/product/fullscreen]')
-
-    # url = 'https://lp2.hm.com/hmgoepprod?set=quality%5B79%5D%2Csource%5B%2Fe8%2F4e%2Fe84e3d6cf5155ac862bafa692f10346c3957fa96.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url[file:/product/fullscreen]'
-
-    # url = 'https://lp2.hm.com/hmgoepprod?set=quality%5B79%5D%2Csource%5B%2F44%2Fc2%2F44c2b04b3b6019b91a58db1b5ee07b0d54503432.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url[file:/product/main]'
-    # url = 'https://d30ukgyabounne.cloudfront.net/face.jpeg'
 
     response = requests.get(url)
     img_array = np.asarray(bytearray(response.content), dtype=np.uint8)
@@ -106,18 +87,6 @@ def userSkinTone(url):
 
     userAvgHSV = avgHSVCalc(userSkinHSV)
     print('4')
-
-
-#     print(f"User Skin Avg HSV: {userAvgHSV[0]}")
-
-#     rgb_color = colorsys.hsv_to_rgb(userAvgHSV[0]/360, userAvgHSV[1]/255, userAvgHSV[2]/255)
-
-# # Convert RGB to HEX
-#     hex_color = '#{:02x}{:02x}{:02x}'.format(int(rgb_color[0]*255), int(rgb_color[1]*255), int(rgb_color[2]*255))
-
-#     print("HSV color: ", [10.085380241738104, 105.99668645588845, 159.1227768503759])
-#     print("HEX color: ", hex_color)
-    
     print(f"User Skin Avg HSV: {userAvgHSV}")
     return userAvgHSV
 
