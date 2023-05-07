@@ -91,7 +91,7 @@ def userSkinTone(url):
     response = requests.get(url)
     img_array = np.asarray(bytearray(response.content), dtype=np.uint8)
     userImg = cv2.imdecode(img_array, cv2.IMREAD_COLOR)
-    ###userImg= cv2.imread('model.jpg')
+    ### userImg= cv2.imread('model.jpg')
     print('1')
 
 
@@ -107,30 +107,35 @@ def userSkinTone(url):
 
     # Create a mask to segment the skin tone in the image
     userMask = cv2.inRange(userHSV, lower_skin, upper_skin)
-    ###cv2.imwrite('Input1.jpg',userMask)
+    
 
     # Apply the mask to the original image to extract the skin tone area
     userSkin = cv2.bitwise_and(userImg, userImg, mask=userMask)
     userSkinHSV = cv2.cvtColor(userSkin, cv2.COLOR_BGR2HSV)
-    ###cv2.imwrite('Input2.jpg',userSkinHSV)
+    
     print('2')
 
     userAvgHSV = avgHSVCalc(userSkinHSV)
+    print('unoptimized avgHSV: ', userAvgHSV)
 
 
     # =-=-=-= OPTIMIZED MASKING BEGINS =-=-=-=
 
     if userAvgHSV[2] >= 181:
         lower_skin = np.array([6, 20, 90])
-        upper_skin = np.array([6, 20, 90])
+        upper_skin = np.array([16, 255, 255])
+        print('light skin detected')
 
     elif userAvgHSV[2] < 181:
         lower_skin = np.array([0, 20, 45])
         upper_skin = np.array([16, 255, 255])
+        print('dark skin detected')
     
     userMask = cv2.inRange(userHSV, lower_skin, upper_skin)
+    # cv2.imwrite('Input1.jpg',userMask)
     userSkin = cv2.bitwise_and(userImg, userImg, mask=userMask)
     userSkinHSV = cv2.cvtColor(userSkin, cv2.COLOR_BGR2HSV)
+    # cv2.imwrite('Input2.jpg',userSkin)
 
     userAvgHSV = avgHSVCalc(userSkinHSV)
 
